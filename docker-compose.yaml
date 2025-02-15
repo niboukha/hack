@@ -1,0 +1,45 @@
+
+services:
+  # db :
+  #   build: ./db
+  #   container_name: db-service
+  #   image: db-service
+  #   env_file:
+  #   - .env
+  #   volumes:
+  #     - dataBase:/var/lib/postgresql/13/main
+  #   ports:
+  #     - 5432:5432
+  #     - app_network
+
+  service:
+    build: ./src/service
+    container_name: service
+    image: service
+    expose:
+      - 8080
+    networks:
+      - app_network
+    depends_on:
+      - db
+    volumes:
+      - service:/usr/src/app
+    
+volumes:
+  dataBase:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/data/db/
+      o: bind
+  
+  service:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/data/sevice/
+      o: bind
+
+networks:
+  app_network:
+    driver: bridge
